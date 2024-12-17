@@ -1,23 +1,5 @@
 import XCTest
-@testable import EssentialFeed
-
-class RemoteFeedLoader {
-    let client: HTTPCLient
-    let url: URL
-    init(url: URL, client: HTTPCLient) {
-        self.client = client
-        self.url = url
-    }
-
-    func load() {
-        client.get(from: url)
-    }
-}
-
-protocol HTTPCLient {
-    func get(from url: URL)
-}
-
+import EssentialFeed
 
 final class RemoteFeedLoaderTest: XCTestCase {
 
@@ -48,5 +30,5 @@ final class RemoteFeedLoaderTest: XCTestCase {
         func get(from url: URL) {
             requestURL = url
         }
-    }
+    } 
 }

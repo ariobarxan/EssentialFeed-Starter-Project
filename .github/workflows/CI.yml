@@ -3,24 +3,37 @@
 
 name: CI
 
+# Controls when the action will run.
+# Triggers the workflow on push events and pull requests but only for the master branch.
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build-and-test"
   build-and-test:
-
+    # The type of runner that the job will run on
     runs-on: macos-latest
 
+    # Timeout for the job to prevent it from running indefinitely
+    timeout-minutes: 8
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v4
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
 
-    - name: Selce Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_16.2.app
-      
-    - name: Build and test
-      run: xcodebuild clean build test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+      # Selects the desired Xcode version
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.2.app
 
+      # Displays the Xcode version being used
+      - name: Xcode version
+        run: /usr/bin/xcodebuild -version
 
+      # Cleans, builds, and tests the project using xcodebuild
+      - name: Build and test
+        run: xcodebuild clean build test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk macosx -destination "platform=macOS" ONLY_ACTIVE_ARCH=YES
